@@ -1,4 +1,5 @@
-"""Render docs/images/screens.png: the round screen in several states, drawn with the
+"""Render docs/images/screens.png, expressions.png and conversation.png: the round screen
+in several states, drawn with the
 same shapes and numbers as firmware/src/main.cpp (an illustration, not a screenshot).
 Needs the font from the README setup. Usage: uv run --with pillow python docs/images/make_screens.py
 """
@@ -43,6 +44,10 @@ def screen(state):
         d.rounded_rectangle((S(CX - 80), S(y), S(CX + 30), S(y + 6)), radius=S(3), fill=(255, 200, 0))
         text(CX, ey + EH / 2 + 50, "聞き取り中", 24)
         text(CX, ey + EH / 2 + 88, "明日の天気は？", 24, (150, 165, 255))
+    elif state == "thinking":
+        ey = CY - 45; eyes(ey, gx=0.5, gy=-0.8, scale=0.85)
+        text(CX, ey + EH / 2 + 50, "考え中…", 24)
+        text(CX, ey + EH / 2 + 88, "明日の天気は？", 24, (150, 165, 255))
     elif state == "reply":
         eyes(44, scale=0.2)
         text(CX + 168, 150, "明日の天気は？", 24, (150, 165, 255), "rm")
@@ -67,18 +72,29 @@ def screen(state):
     out = Image.new("RGBA", im.size, (0, 0, 0, 0)); out.paste(im, mask=mask)
     return out.resize((W, W), Image.LANCZOS)
 
-states = [("idle", "Idle"), ("listening", "Listening"), ("reply", "Reply"), ("happy", "Stroked"), ("dizzy", "Circled"), ("asleep", "Asleep")]
-tile, pad, label_h = 300, 28, 48
-cols = 3; rows = 2
-Wimg = cols * tile + (cols + 1) * pad; Himg = rows * (tile + label_h) + (rows + 1) * pad
-bg = Image.new("RGB", (Wimg, Himg), (22, 23, 29)); d = ImageDraw.Draw(bg)
-lab = ImageFont.truetype(FONT, 24)
-for i, (st, name) in enumerate(states):
-    c, r = i % cols, i // cols
-    x = pad + c * (tile + pad); y = pad + r * (tile + label_h + pad)
-    bez = Image.new("RGBA", (tile, tile), (0, 0, 0, 0)); ImageDraw.Draw(bez).ellipse((0, 0, tile - 1, tile - 1), fill=(48, 50, 60))
-    bg.paste(bez, (x, y), bez)
-    scr = screen(st).resize((tile - 20, tile - 20), Image.LANCZOS); bg.paste(scr, (x + 10, y + 10), scr)
-    d.text((x + tile / 2, y + tile + label_h / 2 + 4), name, font=lab, fill=(200, 202, 212), anchor="mm")
-bg.save(HERE / "screens.png", optimize=True)
-print(bg.size)
+def grid(states, cols, out_name):
+    tile, pad, label_h = 300, 28, 48
+    rows = (len(states) + cols - 1) // cols
+    Wimg = cols * tile + (cols + 1) * pad
+    Himg = rows * (tile + label_h) + (rows + 1) * pad
+    bg = Image.new("RGB", (Wimg, Himg), (22, 23, 29))
+    d = ImageDraw.Draw(bg)
+    lab = ImageFont.truetype(FONT, 24)
+    for i, (st, name) in enumerate(states):
+        c, r = i % cols, i // cols
+        x = pad + c * (tile + pad)
+        y = pad + r * (tile + label_h + pad)
+        bez = Image.new("RGBA", (tile, tile), (0, 0, 0, 0))
+        ImageDraw.Draw(bez).ellipse((0, 0, tile - 1, tile - 1), fill=(48, 50, 60))
+        bg.paste(bez, (x, y), bez)
+        scr = screen(st).resize((tile - 20, tile - 20), Image.LANCZOS)
+        bg.paste(scr, (x + 10, y + 10), scr)
+        d.text((x + tile / 2, y + tile + label_h / 2 + 4), name, font=lab, fill=(200, 202, 212), anchor="mm")
+    bg.save(HERE / out_name, optimize=True)
+    print(out_name, bg.size)
+
+
+grid([("idle", "Idle"), ("listening", "Listening"), ("reply", "Reply"),
+      ("happy", "Stroked"), ("dizzy", "Circled"), ("asleep", "Asleep")], 3, "screens.png")
+grid([("idle", "Idle"), ("happy", "Stroked"), ("dizzy", "Circled"), ("asleep", "Asleep")], 4, "expressions.png")
+grid([("listening", "Listening"), ("thinking", "Thinking"), ("reply", "Reply")], 3, "conversation.png")
