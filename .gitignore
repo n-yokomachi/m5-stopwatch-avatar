@@ -1,0 +1,24 @@
+# secrets and personal settings
+.env
+relay/.env
+firmware/src/env_config.h
+
+# build output
+.pio/
+.vscode/
+__pycache__/
+relay/.venv/
+menu/.pio/
+menu/components/
+menu/managed_components/
+menu/build/
+menu/sdkconfig.m5stack-stopwatch.old
+
+# relay runtime data (session id, conversation history, last recording)
+relay/workspace/
+relay/tmp/
+
+# the font is downloaded and converted locally (see README)
+firmware/fonts/
+firmware/src/font_noto.h
+menu/main/apps/app_avatar/avatar_config.h

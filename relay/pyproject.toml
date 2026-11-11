@@ -1,0 +1,14 @@
+[project]
+name = "m5-voice-relay"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "bleak>=3.1.0",
+    "mlx-whisper>=0.4.3",
+    "numpy>=2.5.4",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+]
