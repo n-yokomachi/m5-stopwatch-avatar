@@ -7,6 +7,7 @@
     <img src="https://img.shields.io/badge/PlatformIO-pioarduino-f5822a" alt="PlatformIO">
     <img src="https://img.shields.io/badge/Python-3.13-3776ab" alt="Python 3.13">
     <img src="https://img.shields.io/badge/Claude%20Code-CLI-d97757" alt="Claude Code">
+    <img src="https://img.shields.io/badge/License-MIT-blue" alt="License: MIT">
   </p>
   <p>
     <img src="docs/images/demo.gif" width="320" alt="Animated round screen: two white eyes glance and blink, follow a touch, smile when stroked, turn into spirals with circling chicks when circled, fall asleep and wake up">
@@ -116,4 +117,4 @@ The full list of states, expressions and timings is in [docs/spec/ui.md](docs/sp
 
 - `menu/` is the [M5StopWatch-UserDemo](https://github.com/m5stack/M5StopWatch-UserDemo) launcher by M5Stack, under the MIT License (`menu/LICENSE`). The changes are listed in [menu/README.md](menu/README.md).
 - Noto Sans JP is licensed under the SIL Open Font License 1.1. It is not included in this repository; it is downloaded and converted during setup.
-- Everything else: TBD
+- Everything else: MIT License (`LICENSE`).
